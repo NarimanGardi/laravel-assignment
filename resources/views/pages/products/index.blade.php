@@ -8,5 +8,10 @@
 
     <div id="flash-messages"></div>
     @include('pages.products.create')
+    
+    <hr>
+    <div id="product-table">
+
+    </div>
 
 @endsection

@@ -73,6 +73,16 @@ class ProductController extends Controller
     }
 
     /**
+     * Fetch all products for AJAX requests.
+     */
+    public function fetchProducts()
+    {
+        $products = Product::orderByDesc('submitted_at')->get();
+
+        return response()->json($products);
+    }
+
+    /**
      * Save the product data as a JSON file.
      */
     private function saveProductAsJson(Product $product)

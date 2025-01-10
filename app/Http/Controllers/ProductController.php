@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Product;
 use Illuminate\Http\Request;
+use App\Http\Requests\Product\StoreProductRequest;
 
 class ProductController extends Controller
 {
@@ -20,15 +21,19 @@ class ProductController extends Controller
      */
     public function create()
     {
-        //
+        abort(404);
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreProductRequest $request)
     {
-        //
+        $validatedData = $request->validated();
+
+        Product::create($validatedData);
+
+        return redirect()->route('products.index');
     }
 
     /**
@@ -60,6 +65,6 @@ class ProductController extends Controller
      */
     public function destroy(Product $product)
     {
-        //
+        abort(404);
     }
 }

@@ -6,6 +6,7 @@
 
 @section('content')
 
+    <div id="flash-messages"></div>
     @include('pages.products.create')
 
 @endsection

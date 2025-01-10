@@ -37,7 +37,7 @@ class ProductController extends Controller
         $this->saveProductAsJson($product);
         $this->saveProductAsXml($product);
 
-        return redirect()->route('products.index');
+        return response()->json(['success' => 'Product created successfully!']);
     }
 
     /**
@@ -101,7 +101,7 @@ class ProductController extends Controller
      */
     private function saveProductAsXml(Product $product)
     {
-        $fileName = 'product-' . $product->id . '.xml';
+        $fileName = 'product_' . $product->id . '.xml';
 
         $directory = storage_path('app/public/xml');
 

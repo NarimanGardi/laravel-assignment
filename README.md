@@ -4,7 +4,7 @@
 
 -   PHP >= 8.3
 -   Laravel/Framework >= 11.0
-    Node >= 20.18.1
+-   Node >= 20.18.1
 
 ## Installation
 * Install PHP and Composer on your local or production server:

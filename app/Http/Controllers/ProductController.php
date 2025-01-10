@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use SimpleXMLElement;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use App\Http\Requests\Product\StoreProductRequest;
@@ -31,7 +32,10 @@ class ProductController extends Controller
     {
         $validatedData = $request->validated();
 
-        Product::create($validatedData);
+        $product = Product::create($validatedData);
+
+        $this->saveProductAsJson($product);
+        $this->saveProductAsXml($product);
 
         return redirect()->route('products.index');
     }
@@ -66,5 +70,53 @@ class ProductController extends Controller
     public function destroy(Product $product)
     {
         abort(404);
+    }
+
+    /**
+     * Save the product data as a JSON file.
+     */
+    private function saveProductAsJson(Product $product)
+    {
+        $fileName = 'product_' . $product->id . '.json';
+
+        $directory = storage_path('app/public/json');
+
+        if (!is_dir($directory))
+            mkdir($directory, 0755, true);
+
+        $filePath = $directory . '/' . $fileName;
+
+        $productData = [
+            'id' => $product->id,
+            'name' => $product->name,
+            'quantity_in_stock' => $product->quantity_in_stock,
+            'price_per_item' => $product->price_per_item,
+        ];
+
+        file_put_contents($filePath, json_encode($productData, JSON_PRETTY_PRINT));
+    }
+
+    /**
+     * Save the product data as an XML file.
+     */
+    private function saveProductAsXml(Product $product)
+    {
+        $fileName = 'product-' . $product->id . '.xml';
+
+        $directory = storage_path('app/public/xml');
+
+        if (!is_dir($directory))
+            mkdir($directory, 0755, true);
+
+        $filePath = $directory . '/' . $fileName;
+
+        $productXml = new SimpleXMLElement('<product/>');
+
+        $productXml->addChild('id', $product->id);
+        $productXml->addChild('name', $product->name);
+        $productXml->addChild('quantity_in_stock', $product->quantity_in_stock);
+        $productXml->addChild('price_per_item', $product->price_per_item);
+
+        $productXml->asXML($filePath);
     }
 }

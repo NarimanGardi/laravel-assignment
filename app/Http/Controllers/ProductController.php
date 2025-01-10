@@ -6,6 +6,7 @@ use SimpleXMLElement;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use App\Http\Requests\Product\StoreProductRequest;
+use App\Http\Requests\Product\UpdateProductRequest;
 
 class ProductController extends Controller
 {
@@ -45,7 +46,7 @@ class ProductController extends Controller
      */
     public function show(Product $product)
     {
-        //
+        abort(404);
     }
 
     /**
@@ -53,15 +54,20 @@ class ProductController extends Controller
      */
     public function edit(Product $product)
     {
-        //
+        return response()->json($product);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Product $product)
+    public function update(UpdateProductRequest $request, Product $product)
     {
-        //
+        $product->update($request->validated());
+
+        $this->saveProductAsJson($product);
+        $this->saveProductAsXml($product);
+
+        return response()->json(['success' => 'Product updated successfully!']);
     }
 
     /**
